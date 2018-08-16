@@ -1,6 +1,12 @@
 package Structure.Object;
 
-import Structure.GameObject;
+import Structure.Basic.Attribute;
+import Structure.Basic.GameObject;
+import Structure.Basic.Transform;
+import Enum.Tag;
 
-public class Enemy extends GameObject {
+abstract public class Enemy extends GameObject {
+    public Enemy(String[] imagePaths, Transform transform, Attribute attribute) {
+        super(Tag.enemy, imagePaths, transform, attribute);
+    }
 }

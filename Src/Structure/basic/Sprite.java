@@ -1,22 +1,20 @@
-package Structure;
+package Structure.Basic;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import Enum.Tag
 
 public class Sprite extends Component{
+    private static final int maxCount = 5;
+    private int count;
     private GameObject parent;
     private BufferedImage[] images;
     private int currentIndex;
 
-    public Sprite(GameObject parent, String[] imagePaths) {
-        super(parent);
+    public Sprite(String[] imagePaths) {
+        this.count = 0;
         this.currentIndex = 0;
         this.images = new BufferedImage[imagePaths.length];
 
@@ -32,15 +30,15 @@ public class Sprite extends Component{
 
     }
 
-    public GameObject getParent() {
-        return parent;
-    }
-
     public void animate() {
         this.currentIndex = (this.currentIndex + 1) % images.length;
     }
 
-    public BufferedImage get() {
+    public BufferedImage getImage() {
+        // for every "maxCount" times of repainting, animate once.
+        if (count >= maxCount) this.animate();
+        count = (count + 1) % maxCount;
+
         return images[currentIndex];
     }
 }
