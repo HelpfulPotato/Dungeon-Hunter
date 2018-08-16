@@ -1,4 +1,4 @@
-package Structure;
+package Structure.Basic;
 
 import Enum.Rotation;
 
@@ -8,17 +8,11 @@ public class Transform extends Component {
     private int y;
     private Rotation rotation;
 
-    public Transform(GameObject parent, int x, int y, Rotation rotation) {
-        super(parent);
+    public Transform(int x, int y, Rotation rotation) {
         this.x = x;
         this.y = y;
         this.rotation = rotation;
     }
-
-    public GameObject getParent() {
-        return parent;
-    }
-
     public int getX() {
         return x;
     }
