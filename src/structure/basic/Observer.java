@@ -1,12 +1,11 @@
 package structure.basic;
 
 import enums.GameEvent;
-import enums.Rotation;
 
 /**
  * An interface that allows an object to receive updates from the object
  * they listen to.
  */
-interface Observer {
-    void update(Object observable, GameEvent e, Rotation rotation);
+public interface Observer {
+    void update(Object observable, GameEvent e);
 }

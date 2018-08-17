@@ -1,5 +1,5 @@
 package enums;
 
 public enum GameEvent {
-    move, attack
+    move, battle, pick
 }

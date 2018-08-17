@@ -1,9 +1,10 @@
 package structure.object;
 
+import prefab.Player;
 import structure.basic.Attribute;
 import structure.basic.GameObject;
-import structure.basic.Transform;
 import enums.Tag;
+import structure.basic.Transform;
 
 abstract public class Item extends GameObject {
 
@@ -12,4 +13,6 @@ abstract public class Item extends GameObject {
     }
 
     abstract public String getDescription();
+
+    abstract public void takeEffect(Player player);
 }

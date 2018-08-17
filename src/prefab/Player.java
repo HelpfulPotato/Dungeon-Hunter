@@ -3,8 +3,9 @@ package prefab;
 import structure.basic.Attribute;
 import structure.basic.GameObject;
 import enums.Tag;
-import structure.basic.Transform;
 import enums.Rotation;
+import structure.basic.Transform;
+import structure.object.Enemy;
 
 import java.util.HashMap;
 
@@ -26,5 +27,9 @@ final public class Player extends GameObject {
     // custom constructor
     public Player(HashMap<Rotation, String[]> imagePaths, Transform transform, Attribute attribute) {
         super(Tag.player, imagePaths, transform, attribute);
+    }
+
+    public void attack(Enemy enemy) {
+
     }
 }
