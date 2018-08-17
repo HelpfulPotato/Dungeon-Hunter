@@ -1,4 +1,4 @@
-package Enum;
+package enums;
 
 public enum Rotation {
     up, down, left, right

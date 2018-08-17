@@ -1,10 +1,10 @@
-package FinalObject;
+package prefab;
 
-import Structure.Basic.Attribute;
-import Structure.Basic.GameObject;
-import Enum.Tag;
-import Structure.Basic.Transform;
-import Enum.Rotation;
+import structure.basic.Attribute;
+import structure.basic.GameObject;
+import enums.Tag;
+import structure.basic.Transform;
+import enums.Rotation;
 
 import java.util.HashMap;
 

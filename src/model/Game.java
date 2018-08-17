@@ -1,6 +1,6 @@
-package Model;
+package model;
 
-import Structure.Basic.GameObject;
+import structure.basic.GameObject;
 
 import java.util.ArrayList;
 

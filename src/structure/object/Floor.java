@@ -1,8 +1,8 @@
-package Structure.Object;
+package structure.object;
 
-import Structure.Basic.GameObject;
-import Structure.Basic.Transform;
-import Enum.Tag;
+import structure.basic.GameObject;
+import structure.basic.Transform;
+import enums.Tag;
 
 abstract public class Floor extends GameObject {
     public final static int changeRate = 2;

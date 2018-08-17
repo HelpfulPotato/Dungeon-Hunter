@@ -1,6 +1,6 @@
-package Structure.Basic;
+package structure.basic;
 
-import Enum.Rotation;
+import enums.Rotation;
 
 public class Transform extends Component {
 

@@ -1,4 +1,4 @@
-package Structure.Basic;
+package structure.basic;
 
 public class Attribute extends Component{
 	public static final float critRate = 1.5f;

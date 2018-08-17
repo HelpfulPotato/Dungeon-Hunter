@@ -1,7 +1,7 @@
-package Structure.Basic;
+package structure.basic;
 
-import Enum.Tag;
-import Enum.Rotation;
+import enums.Tag;
+import enums.Rotation;
 
 import java.util.HashMap;
 

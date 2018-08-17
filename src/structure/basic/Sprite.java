@@ -1,4 +1,4 @@
-package Structure.Basic;
+package structure.basic;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

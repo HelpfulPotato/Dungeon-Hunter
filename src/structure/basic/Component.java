@@ -1,4 +1,4 @@
-package Structure.Basic;
+package structure.basic;
 
 abstract public class Component {
     protected GameObject parent;
