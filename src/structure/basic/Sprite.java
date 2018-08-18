@@ -35,11 +35,8 @@ public class Sprite extends Component{
 
     public BufferedImage getImage() {
         // for every "maxCount" times of repainting, animate once.
-        if (this.count >= maxCount) this.animate();
-        this.count = this.count + 1;
-        System.out.println("index is " + currentIndex);
-        System.out.println("count is " + count);
-
+        if (this.count == maxCount - 1) this.animate();
+        this.count = (this.count + 1) % maxCount;
 
         return this.images[this.currentIndex];
     }
