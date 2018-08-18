@@ -1,8 +1,8 @@
 package structure.object;
 
 import structure.basic.GameObject;
-import structure.basic.Transform;
 import enums.Tag;
+import structure.basic.Transform;
 
 abstract public class Wall extends GameObject {
 

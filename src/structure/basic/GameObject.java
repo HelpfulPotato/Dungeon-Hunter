@@ -2,6 +2,7 @@ package structure.basic;
 
 import enums.Tag;
 import enums.Rotation;
+import model.Game;
 
 import java.util.HashMap;
 
@@ -78,5 +79,8 @@ abstract public class GameObject {
         return attribute;
     }
 
-
+    public void setPosition(int x, int y) {
+        this.getTransform().setX(x);
+        this.getTransform().setY(y);
+    }
 }

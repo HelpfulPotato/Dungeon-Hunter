@@ -11,7 +11,10 @@ public class Attribute extends Component{
 	private float hpAbsorb;
 	private float blockChance;
 	private float blockRate;
+	private float counterChance;
 	private float comboChance;
+	private float dodgeChance;
+	private float pierceRate;
 
 	public Attribute(int hitPoint, int strength, int armor, float critChance) {
 		this.hp = hitPoint;
