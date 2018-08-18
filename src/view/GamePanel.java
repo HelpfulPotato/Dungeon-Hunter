@@ -135,8 +135,8 @@ public class GamePanel extends JPanel{
                     switch(obj.getTag()){
                         case player:
                             g.drawImage(obj.getSprite().getImage(),
-                                    j * blockSize, i * blockSize, null);
-                            drawHpBar(g, j * blockSize, i * blockSize - hpOffset,
+                                    j * blockSize + x, i * blockSize + y, null);
+                            drawHpBar(g, j * blockSize + x, i * blockSize - hpOffset + y,
                                     (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
 
                             //draw moving animation
@@ -144,13 +144,13 @@ public class GamePanel extends JPanel{
 
                                 switch(rotation) {
                                     case left:
-                                        x -= 2;
+                                        x -= 4;
                                     case right:
-                                        x += 2;
+                                        x += 4;
                                     case up:
-                                        y -= 2;
+                                        y -= 4;
                                     case down:
-                                        y += 2;
+                                        y += 4;
                                 }
                                 //if player moves one block,
                                 if( x % blockSize == 0 && y % blockSize == 0){

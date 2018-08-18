@@ -163,13 +163,12 @@ public class Game {
 	}
 
 	private void swap(int ox, int oy, int x, int y, Rotation rotation) {
+		player.getTransform().setRotation(rotation);
+		suspend(State.move);
 		board[ox][oy] = null;
 		board[x][y] = player;
 		player.setPosition(x, y);
-		player.getTransform().setRotation(rotation);
-		System.out.println("before suspend");
-		suspend(State.move);
-		System.out.println("after suspend " + x + " y is " + y);
+
 	}
 
 	public void notifyObservers() {
