@@ -1,12 +1,12 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import model.Game;
 
 
 
 public class MenuPanel extends JPanel {
     private Game game;
-
     //Constructor
     public MenuPanel(Game g,JPanel Container) {
         this.game = g;

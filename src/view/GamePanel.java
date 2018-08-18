@@ -6,6 +6,15 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 
+import enums.Tag;
+import model.Game;
+import structure.basic.Observer;
+import structure.basic.GameObject;
+import enums.GameEvent;
+import enums.Rotation;
+import enums.Key;
+
+import static enums.Rotation.*;
 
 
 //GamePanel contains two panels,
@@ -24,11 +33,16 @@ public class GamePanel extends JPanel{
     }
 
     //MainPanel is a observer of Game, receive updates from Game.
-    public class MainPanel extends JPanel implements Observer {
+    public class MainPanel extends JPanel{
         private Game game;
 
-        //player position
+        private Timer animationTimer;
+
+        //player position offside;
         private int x, y;
+
+        //player direction
+        private Rotation rotation;
 
         //hp bar Offset
         private final int hpOffset = 5;
@@ -40,58 +54,128 @@ public class GamePanel extends JPanel{
 
         //Constructor
         public MainPanel(Game game) {
-        this.game = game;
-        game.addObserver(this);
-        setPreferredSize(new Dimension(600,600));
-        setDoubleBuffered(true);
-        //Listen to user input
-        addKeyListener(new KeyAdapter () {
-            public void keyPressed(KeyEvent e) {
-                switch(e.getKeyCode()) {
-                    case KeyEvent.VK_W:
-
-                        break;
-                    case KeyEvent.VK_S:
-
-                        break;
-                    case KeyEvent.VK_A:
-
-                        break;
-                    case KeyEvent.VK_D:
-
-                        break;
+            this.game = game;
+            this.x = 0;
+            this.y = 0;
+            game.addObserver(this);
+            setPreferredSize(new Dimension(600,600));
+            setDoubleBuffered(true);
+            //Listen to user input
+            addKeyListener(new KeyAdapter () {
+                public void keyPressed(KeyEvent e) {
+                    switch(e.getKeyCode()) {
+                        case KeyEvent.VK_W:
+                            rotation = Rotation.up;
+                            game.command(Key.up);
+                            break;
+                        case KeyEvent.VK_S:
+                            rotation = Rotation.down;
+                            game.command(Key.down);
+                            break;
+                        case KeyEvent.VK_A:
+                            rotation = Rotation.left;
+                            game.command(Key.left);
+                            break;
+                        case KeyEvent.VK_D:
+                            rotation = Rotation.right;
+                            game.command(Key.right);
+                            break;
+                    }
                 }
-            }
-        });
-
-        this.setFocusable(true);
-        this.requestFocusInWindow();
+            });
+            this.animationTimer = new Timer(1000 / FPS, event -> {
+                this.redraw();
+            });
+            this.setFocusable(true);
+            this.requestFocusInWindow();
         }
+
+        private void redraw(){
+            if(game.getState() != prepare){
+                this.repaint();
+            }
+        }
+
 
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            switch (game.mode) {
-                case Lost:
-                    break;
-                case Win:
-                    break;
-                case Idle:
-                    //Loop through the game board
-                    for (int i = 0; i < game.col; i++) {
-                        for (int j = 0; j < game.row; j++) {
-                            //Get block type
-                            GameObject obj = game.getBlock(i,j);
-                            //Draw  block based on block type
-                            
-                            //If block type is enemy or player, draw hp bar
-                            drawHpBar(g,x * blockSize,y * blockSize - hpOffset,
-                                    (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
-                        }
-                    }
-            }
-            return;
+            //draw floor first
+            drawFloor(g);
+            drawBoard(g);
         }
 
+        //Draw floor image
+        private void drawFloor(Graphics g) {
+            //Loop through the game board
+            for (int i = 0; i < game.row; i++) {
+                for (int j = 0; j < game.col; j++) {
+                    g.drawImage(game.getFloorImage(), j * blockSize, i * blockSize, null);
+                }
+            }
+        }
+
+        //Draw board
+        private void drawBoard(Graphics g){
+            //Loop through the game board
+            for (int i = 0; i < game.row; i++) {
+                for (int j = 0; j < game.col; j++) {
+                    //Get block type
+                    GameObject obj = game.getBlock(j, i);
+                    switch(obj.getTag()){
+                        case player:
+                            g.drawImage(obj.getSprite().getImage(),
+                                    j * blockSize + x, i * blockSize + y, null);
+
+                            drawHpBar(g, ( (j * blockSize + x, i * blockSize - hpOffset + y,
+                                    (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
+
+                            //draw moving animation
+                            if(game.getState()) == moving){
+                                switch(rotation) {
+                                    case left:
+                                        x -= 2;
+                                    case right:
+                                        x += 2;
+                                    case up:
+                                        y -= 2;
+                                    case down:
+                                        y += 2;
+                                }
+                                //if player moves one block,
+                                if( x % blockSize == 0 && y % blockSize == 0){
+                                    //reset player offset and notify game
+                                    x = 0;
+                                    y = 0;
+                                    game.notifyState(idel);
+                                }
+                            }
+
+                            break;
+
+                        case enemy:
+                            g.drawImage(obj.getSprite().getImage(),
+                                    j * blockSize, i * blockSize, null);
+
+                            drawHpBar(g, ( (j * blockSize, i * blockSize - hpOffset,
+                                    (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
+                            break;
+
+                        case floor:
+                            break;
+
+                         default:
+                             g.drawImage(obj.getSprite().getImage(),
+                                     j * blockSize, i * blockSize, null);
+                    }
+                }
+            }
+        }
+
+
+        //Draw battle animation
+        private void drawPlayerBattle(Graphics g){
+
+        }
 
         private void drawHpBar(Graphics g , int x, int y , int width){
             g.setColor(Color.black);
@@ -100,10 +184,6 @@ public class GamePanel extends JPanel{
             g.fillRect(x, y, width,2);
         }
 
-        //Be called when there is something needs to be updated.
-        public void update(Object observable, GameEvent e) {
-
-        }
     }
 
     //SidePanel is a observer of Game, receive updates from Game.
@@ -115,7 +195,7 @@ public class GamePanel extends JPanel{
         }
 
         //Be called when there is something needs to be updated.
-        public void update(Object observable, GameEvent e) {
+        public void update(Object observable) {
             this.repaint();
         }
     }
