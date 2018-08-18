@@ -1,20 +1,15 @@
+package view;
+
 import java.awt.*;
-import java.io.*;
-import javax.imageio.*;
-import java.awt.image.*;
-import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-import enums.Tag;
+import enums.State;
 import model.Game;
 import structure.basic.Observer;
 import structure.basic.GameObject;
-import enums.GameEvent;
 import enums.Rotation;
 import enums.Key;
-
-import static enums.Rotation.*;
 
 
 //GamePanel contains two panels,
@@ -83,7 +78,7 @@ public class GamePanel extends JPanel{
                     }
                 }
             });
-            this.animationTimer = new Timer(1000 / FPS, event -> {
+            this.animationTimer = new Timer(1000 / fps, event -> {
                 this.redraw();
             });
             this.setFocusable(true);
@@ -91,7 +86,7 @@ public class GamePanel extends JPanel{
         }
 
         private void redraw(){
-            if(game.getState() != prepare){
+            if(game.getState() != State.prepare){
                 this.repaint();
             }
         }
@@ -109,7 +104,7 @@ public class GamePanel extends JPanel{
             //Loop through the game board
             for (int i = 0; i < game.row; i++) {
                 for (int j = 0; j < game.col; j++) {
-                    g.drawImage(game.getFloorImage(), j * blockSize, i * blockSize, null);
+                    g.drawImage(game.getFloorImage(j, i), j * blockSize, i * blockSize, null);
                 }
             }
         }
@@ -117,8 +112,8 @@ public class GamePanel extends JPanel{
         //Draw board
         private void drawBoard(Graphics g){
             //Loop through the game board
-            for (int i = 0; i < game.row; i++) {
-                for (int j = 0; j < game.col; j++) {
+            for (int i = 0; i < Game.row; i++) {
+                for (int j = 0; j < Game.col; j++) {
                     //Get block type
                     GameObject obj = game.getBlock(j, i);
                     switch(obj.getTag()){
