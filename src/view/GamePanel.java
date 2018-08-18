@@ -18,13 +18,14 @@ public class GamePanel extends JPanel{
 
     //Constructor
     public GamePanel(Game g,JPanel Container) {
-        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        this.setLayout(new BorderLayout());
+        // this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         this.game = g;
         //Two views of game model
         MainPanel mainPanel = new MainPanel(game);
         SidePanel sidePanel = new SidePanel(game, Container);
-        this.add(sidePanel);
-        this.add(mainPanel);
+        this.add(sidePanel, BorderLayout.EAST);
+        this.add(mainPanel, BorderLayout.CENTER);
     }
 
     //MainPanel is a observer of Game, receive updates from Game.
@@ -52,7 +53,6 @@ public class GamePanel extends JPanel{
             this.game = game;
             this.x = 0;
             this.y = 0;
-            game.addObserver(this);
             setPreferredSize(new Dimension(600,600));
             setDoubleBuffered(true);
             //Listen to user input
@@ -79,18 +79,15 @@ public class GamePanel extends JPanel{
                 }
             });
             this.animationTimer = new Timer(1000 / fps, event -> {
-                this.redraw();
+                this.repaint();
             });
             this.setFocusable(true);
-            this.requestFocusInWindow();
         }
 
-        private void redraw(){
-            if(game.getState() != State.prepare){
-                this.repaint();
-            }
+        public void start() {
+            this.animationTimer.start();
+            this.requestFocus();
         }
-
 
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -104,7 +101,7 @@ public class GamePanel extends JPanel{
             //Loop through the game board
             for (int i = 0; i < game.row; i++) {
                 for (int j = 0; j < game.col; j++) {
-                    g.drawImage(game.getFloorImage(j, i), j * blockSize, i * blockSize, null);
+                    g.drawImage(game.getFloorImage(i, j), j * blockSize, i * blockSize, null);
                 }
             }
         }
@@ -115,17 +112,18 @@ public class GamePanel extends JPanel{
             for (int i = 0; i < Game.row; i++) {
                 for (int j = 0; j < Game.col; j++) {
                     //Get block type
-                    GameObject obj = game.getBlock(j, i);
+                    GameObject obj = game.getBlock(i, j);
+                    if (obj == null) continue;
                     switch(obj.getTag()){
                         case player:
                             g.drawImage(obj.getSprite().getImage(),
-                                    j * blockSize + x, i * blockSize + y, null);
-
-                            drawHpBar(g, ( (j * blockSize + x, i * blockSize - hpOffset + y,
+                                    j * blockSize, i * blockSize, null);
+                            drawHpBar(g, j * blockSize, i * blockSize - hpOffset,
                                     (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
 
                             //draw moving animation
-                            if(game.getState()) == moving){
+                            if(game.getState() == State.move){
+
                                 switch(rotation) {
                                     case left:
                                         x -= 2;
@@ -141,7 +139,7 @@ public class GamePanel extends JPanel{
                                     //reset player offset and notify game
                                     x = 0;
                                     y = 0;
-                                    game.notifyState(idel);
+                                    game.setState(State.idle);
                                 }
                             }
 
@@ -151,11 +149,8 @@ public class GamePanel extends JPanel{
                             g.drawImage(obj.getSprite().getImage(),
                                     j * blockSize, i * blockSize, null);
 
-                            drawHpBar(g, ( (j * blockSize, i * blockSize - hpOffset,
+                            drawHpBar(g, j * blockSize, i * blockSize - hpOffset,
                                     (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
-                            break;
-
-                        case floor:
                             break;
 
                          default:
@@ -172,11 +167,11 @@ public class GamePanel extends JPanel{
 
         }
 
-        private void drawHpBar(Graphics g , int x, int y , int width){
+        private void drawHpBar(Graphics g , int hpx, int hpy , int width){
             g.setColor(Color.black);
-            g.fillRect(x, y, blockSize,2);
+            g.fillRect(hpx, hpy, blockSize,2);
             g.setColor(Color.red);
-            g.fillRect(x, y, width,2);
+            g.fillRect(hpx, hpy, width,2);
         }
 
     }

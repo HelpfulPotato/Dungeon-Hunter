@@ -40,7 +40,7 @@ abstract public class GameObject {
         this(tag, imagePaths.get(Rotation.down), transform, attribute);
         this.buildSprite(imagePaths.get(Rotation.up), Rotation.up);
         this.buildSprite(imagePaths.get(Rotation.left), Rotation.left);
-        this.buildSprite(imagePaths.get(Rotation.down), Rotation.down);
+        this.buildSprite(imagePaths.get(Rotation.right), Rotation.right);
     }
 
 	// function used to prevent duplicate storing of same images

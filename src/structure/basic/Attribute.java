@@ -2,7 +2,6 @@ package structure.basic;
 
 public class Attribute extends Component{
 	public static final float critRate = 1.5f;
-	private GameObject parent;
 	private int hp;
 	private int maxHp;
 	private int strength;
@@ -16,11 +15,20 @@ public class Attribute extends Component{
 	private float dodgeChance;
 	private float pierceRate;
 
-	public Attribute(int hitPoint, int strength, int armor, float critChance) {
-		this.hp = hitPoint;
+	public Attribute(int hp, int maxHp, int strength, int armor, float critChance, float hpAbsorb, float blockChance,
+					 float blockRate, float counterChance, float comboChance, float dodgeChance, float pierceRate) {
+		this.hp = hp;
+		this.maxHp = maxHp;
 		this.strength = strength;
 		this.armor = armor;
 		this.critChance = critChance;
+		this.hpAbsorb = hpAbsorb;
+		this.blockChance = blockChance;
+		this.blockRate = blockRate;
+		this.counterChance = counterChance;
+		this.comboChance = comboChance;
+		this.dodgeChance = dodgeChance;
+		this.pierceRate = pierceRate;
 	}
 
 	public float getPercent() {

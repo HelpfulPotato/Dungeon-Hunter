@@ -1,8 +1,12 @@
+package view;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import model.Game;
 
+import main.Main;
+import model.Game;
+import sun.plugin.com.event.COMEventHandler;
 
 
 public class MenuPanel extends JPanel {
@@ -18,13 +22,15 @@ public class MenuPanel extends JPanel {
 
                     //Switch to game panel, Start game
                     CardLayout cardLayout = (CardLayout) Container.getLayout();
-                    cardLayout.show(Container, "Game");
                     game.initNewGame();
+                    cardLayout.show(Container, "Game");
+                    // hard code index in order to get MainPanel without passing reference
+                    GamePanel.MainPanel gamePanel = (GamePanel.MainPanel) ((JPanel) MenuPanel.this.getParent().getComponent(1)).getComponent(1);
+                    gamePanel.start();
                     Container.revalidate();
                 }
             }
         });
         this.setFocusable(true);
-        this.requestFocusInWindow();
     }
 }

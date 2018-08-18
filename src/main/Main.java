@@ -1,3 +1,9 @@
+package main;
+
+import model.Game;
+import view.GamePanel;
+import view.MenuPanel;
+
 import java.awt.*;
 import javax.swing.*;
 
@@ -8,8 +14,8 @@ public class Main extends JFrame {
     //Constructor
     public Main() {
         setTitle("Dongeon Hunter");
-        setSize(800,600);
         setResizable(false);
+        setSize(800, 635);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Create a Container for Panels and set Container to CardLayout

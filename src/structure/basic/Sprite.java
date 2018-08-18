@@ -9,7 +9,6 @@ import java.net.URISyntaxException;
 public class Sprite extends Component{
     private static final int maxCount = 5;
     private int count;
-    private GameObject parent;
     private BufferedImage[] images;
     private int currentIndex;
 

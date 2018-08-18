@@ -44,9 +44,23 @@ public class Game {
 		// build floors and immutable walls
 		setupFloor(currentLevel / changeRate);
 		setupBorder(currentLevel / changeRate);
+		setupPlayer();
+
 
 		// start game
 		state.setState(State.idle);
+	}
+
+	private void setupPlayer() {
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < col; j++) {
+				if (board[i][j] == null) {
+					player = new Player(new Transform(i, j, Rotation.down));
+					board[i][j] = player;
+					return;
+				}
+			}
+		}
 	}
 
 	private void resetAll() {
@@ -116,6 +130,7 @@ public class Game {
 	}
 
 	private void move(Rotation rotation) {
+
 		int ox = player.getTransform().getX();
 		int oy = player.getTransform().getY();
 		int x = ox;
@@ -152,7 +167,9 @@ public class Game {
 		board[x][y] = player;
 		player.setPosition(x, y);
 		player.getTransform().setRotation(rotation);
+		System.out.println("before suspend");
 		suspend(State.move);
+		System.out.println("after suspend " + x + " y is " + y);
 	}
 
 	public void notifyObservers() {
@@ -165,7 +182,7 @@ public class Game {
 		return Game.instance;
 	}
 
-
+/*
 	public void suspend(State state) {
 		try {
 			synchronized (this.state) {
@@ -178,6 +195,13 @@ public class Game {
 			e.printStackTrace();
 		}
 	}
+*/
+	public void suspend(State state) {
+		System.out.println("ui thread is" + Thread.currentThread().getId());
+		while(this.state.getState() != State.idle) {
+			// no op
+		}
+	}
 
 	public State getState() {
 		return this.state.getState();
@@ -187,10 +211,12 @@ public class Game {
 		this.state.setState(state);
 	}
 
+	/*
 	public void notifyState(State state) {
 		synchronized (this.state) {
 			this.state.setState(state);
 			this.state.notify();
 		}
 	}
+	*/
 }
