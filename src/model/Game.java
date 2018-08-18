@@ -197,6 +197,7 @@ public class Game {
 	}
 */
 	public void suspend(State state) {
+		this.state.setState(state);
 		System.out.println("ui thread is" + Thread.currentThread().getId());
 		while(this.state.getState() != State.idle) {
 			// no op

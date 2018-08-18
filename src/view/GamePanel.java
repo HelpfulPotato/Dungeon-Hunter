@@ -3,6 +3,8 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import enums.State;
 import model.Game;
@@ -28,6 +30,16 @@ public class GamePanel extends JPanel{
         this.add(mainPanel, BorderLayout.CENTER);
     }
 
+    private class Task implements Runnable{
+        private Key k;
+        public Task(Key k) {
+            this.k = k;
+        }
+        public void run(){
+            game.command(this.k);
+        }
+    }
+
     //MainPanel is a observer of Game, receive updates from Game.
     public class MainPanel extends JPanel{
         private Game game;
@@ -47,6 +59,8 @@ public class GamePanel extends JPanel{
         private final int  blockSize = 40;
 
         private final int fps = 30;
+
+
 
         //Constructor
         public MainPanel(Game game) {
@@ -171,19 +185,12 @@ public class GamePanel extends JPanel{
 
         }
 
-<<<<<<< HEAD:src/view/GamePanel.java
-        private void drawHpBar(Graphics g , int hpx, int hpy , int width){
-            g.setColor(Color.black);
-            g.fillRect(hpx, hpy, blockSize,2);
-            g.setColor(Color.red);
-            g.fillRect(hpx, hpy, width,2);
-=======
+
         private void drawHpBar(Graphics g , int x, int y , int width){
             g.setColor(Color.red);
             g.fillRect(x, y, blockSize,2);
-            g.setColor(Color.green\);
+            g.setColor(Color.green);
             g.fillRect(x, y, width,2);
->>>>>>> NewPotato:Src/view/GamePanel.java
         }
 
     }
