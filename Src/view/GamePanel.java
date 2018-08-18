@@ -32,6 +32,16 @@ public class GamePanel extends JPanel{
         this.add(mainPanel);
     }
 
+    private class Task implements Runnable{
+        private Key k;
+        public Task(Key k) {
+            key = k;
+        }
+        public void run(){
+            game.command(key);
+        }
+    }
+
     //MainPanel is a observer of Game, receive updates from Game.
     public class MainPanel extends JPanel{
         private Game game;
@@ -60,25 +70,29 @@ public class GamePanel extends JPanel{
             game.addObserver(this);
             setPreferredSize(new Dimension(600,600));
             setDoubleBuffered(true);
-            //Listen to user input
+
+            // creates a thread pool with one thread as the fixed pool size
+            ExecutorService pool = Executors.newFixedThreadPool(1);
+
+            // Listen to user input, and passes the Task to the pool to execute user command
             addKeyListener(new KeyAdapter () {
                 public void keyPressed(KeyEvent e) {
                     switch(e.getKeyCode()) {
                         case KeyEvent.VK_W:
                             rotation = Rotation.up;
-                            game.command(Key.up);
+                            pool.execute(new Task(Key.up));
                             break;
                         case KeyEvent.VK_S:
                             rotation = Rotation.down;
-                            game.command(Key.down);
+                            pool.execute(new Task(Key.down));
                             break;
                         case KeyEvent.VK_A:
                             rotation = Rotation.left;
-                            game.command(Key.left);
+                            pool.execute(new Task(Key.left));
                             break;
                         case KeyEvent.VK_D:
                             rotation = Rotation.right;
-                            game.command(Key.right);
+                            pool.execute(new Task(Key.right));
                             break;
                     }
                 }
@@ -178,9 +192,9 @@ public class GamePanel extends JPanel{
         }
 
         private void drawHpBar(Graphics g , int x, int y , int width){
-            g.setColor(Color.black);
-            g.fillRect(x, y, blockSize,2);
             g.setColor(Color.red);
+            g.fillRect(x, y, blockSize,2);
+            g.setColor(Color.green\);
             g.fillRect(x, y, width,2);
         }
 
