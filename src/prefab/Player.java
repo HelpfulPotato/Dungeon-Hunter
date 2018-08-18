@@ -1,15 +1,17 @@
 package prefab;
 
+import model.Game;
 import structure.basic.Attribute;
 import structure.basic.GameObject;
 import enums.Tag;
 import enums.Rotation;
 import structure.basic.Transform;
 import structure.object.Enemy;
+import structure.object.Unit;
 
 import java.util.HashMap;
 
-final public class Player extends GameObject {
+final public class Player extends Unit {
 
     // default constructor with default attribute and images
     public Player(Transform transform) {
@@ -29,7 +31,5 @@ final public class Player extends GameObject {
         super(Tag.player, imagePaths, transform, attribute);
     }
 
-    public void attack(Enemy enemy) {
 
-    }
 }

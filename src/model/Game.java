@@ -1,8 +1,9 @@
 package model;
 
-import enums.GameEvent;
+import atomic.AtomicState;
 import enums.Key;
 import enums.Rotation;
+import enums.State;
 import prefab.Player;
 import prefab.floor.Dirt;
 import prefab.wall.Stone;
@@ -12,14 +13,19 @@ import structure.basic.Transform;
 import structure.object.Enemy;
 import structure.object.Floor;
 import structure.object.Item;
+import structure.object.Unit;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Game {
+	public static final Random rand = new Random();
 	public static final int changeRate = 2;
 	public static final int row = 15;
 	public static final int col = 15;
+	private final AtomicState state = new AtomicState(State.prepare);
+	private static Game instance;	// store instance for access functions like drop, don't touch it.
 	private int currentLevel;
 	private ArrayList<Observer> observers;
 	private Player player;
@@ -27,7 +33,9 @@ public class Game {
 	private Floor[][] ground;
 	private GameObject[][] board;
 
-	public Game(){}
+	public Game(){
+		Game.instance = this;
+	}
 
 	public void initNewGame() {
 		// GC all existing objects
@@ -36,6 +44,9 @@ public class Game {
 		// build floors and immutable walls
 		setupFloor(currentLevel / changeRate);
 		setupBorder(currentLevel / changeRate);
+
+		// start game
+		state.setState(State.idle);
 	}
 
 	private void resetAll() {
@@ -43,6 +54,7 @@ public class Game {
 		board = new GameObject[row][col];
 		ground = new Floor[row][col];
 		activeItems = new ArrayList<>();
+		state.setState(State.prepare);
 		currentLevel = 1;
 	}
 
@@ -120,14 +132,13 @@ public class Game {
 		if (board[x][y] == null) {
 			// nothing, then move
 			swap(ox, oy, x, y, rotation);
-			notifyObservers(GameEvent.move);
 		}
 
 		// check what is on the way
 		GameObject go = board[x][y];
 		switch (go.getTag()) {
-			case item: ((Item)go).takeEffect(player); swap(ox, oy, x, y, rotation); notifyObservers(GameEvent.pick);break;
-			case enemy: player.attack((Enemy) go); notifyObservers(GameEvent.battle); break;
+			case item: ((Item)go).takeEffect(player); swap(ox, oy, x, y, rotation);break;
+			case enemy: player.attack((Unit) go); break;
 		}
 
 	}
@@ -141,11 +152,45 @@ public class Game {
 		board[x][y] = player;
 		player.setPosition(x, y);
 		player.getTransform().setRotation(rotation);
+		suspend(State.move);
 	}
 
-	public void notifyObservers(GameEvent ge) {
+	public void notifyObservers() {
 		for (Observer o: observers) {
-			o.update(this, ge);
+			o.update(this);
+		}
+	}
+
+	public static Game instance() {
+		return Game.instance;
+	}
+
+
+	public void suspend(State state) {
+		try {
+			synchronized (this.state) {
+				this.state.setState(state);
+				while(this.state.getState() != State.idle) {
+					this.state.wait();
+				}
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public State getState() {
+		return this.state.getState();
+	}
+
+	public void setState(State state) {
+		this.state.setState(state);
+	}
+
+	public void notifyState(State state) {
+		synchronized (this.state) {
+			this.state.setState(state);
+			this.state.notify();
 		}
 	}
 }
