@@ -76,23 +76,25 @@ public class GamePanel extends JPanel{
             // Listen to user input, and passes the Task to the pool to execute user command
             addKeyListener(new KeyAdapter () {
                 public void keyPressed(KeyEvent e) {
-                    switch(e.getKeyCode()) {
-                        case KeyEvent.VK_W:
-                            rotation = Rotation.up;
-                            pool.execute(new Task(Key.up));
-                            break;
-                        case KeyEvent.VK_S:
-                            rotation = Rotation.down;
-                            pool.execute(new Task(Key.down));
-                            break;
-                        case KeyEvent.VK_A:
-                            rotation = Rotation.left;
-                            pool.execute(new Task(Key.left));
-                            break;
-                        case KeyEvent.VK_D:
-                            rotation = Rotation.right;
-                            pool.execute(new Task(Key.right));
-                            break;
+                    if(game.getState() == State.idle) {
+                        switch (e.getKeyCode()) {
+                            case KeyEvent.VK_W:
+                                rotation = Rotation.up;
+                                pool.execute(new Task(Key.up));
+                                break;
+                            case KeyEvent.VK_S:
+                                rotation = Rotation.down;
+                                pool.execute(new Task(Key.down));
+                                break;
+                            case KeyEvent.VK_A:
+                                rotation = Rotation.left;
+                                pool.execute(new Task(Key.left));
+                                break;
+                            case KeyEvent.VK_D:
+                                rotation = Rotation.right;
+                                pool.execute(new Task(Key.right));
+                                break;
+                        }
                     }
                 }
             });
