@@ -53,12 +53,12 @@ public class GamePanel extends JPanel{
         private Rotation rotation;
 
         //hp bar Offset
-        private final int hpOffset = 5;
+        private final int hpOffset = 8;
 
         // size of each block on the board
         private final int  blockSize = 40;
 
-        private final int fps = 30;
+        private final int fps = 60;
 
 
 
@@ -138,7 +138,7 @@ public class GamePanel extends JPanel{
                         case player:
                             g.drawImage(obj.getSprite().getImage(),
                                     j * blockSize + x, i * blockSize + y, null);
-                            drawHpBar(g, j * blockSize + x, i * blockSize - hpOffset + y,
+                            drawHpBar(g, j * blockSize + x + 1, i * blockSize - hpOffset + y,
                                     (int) (Math.round(blockSize * obj.getAttribute().getPercent())));
 
                             //draw moving animation
@@ -146,13 +146,17 @@ public class GamePanel extends JPanel{
 
                                 switch(rotation) {
                                     case left:
-                                        x -= 4;
+                                        x -= 8;
+                                        break;
                                     case right:
-                                        x += 4;
+                                        x += 8;
+                                        break;
                                     case up:
-                                        y -= 4;
+                                        y -= 8;
+                                        break;
                                     case down:
-                                        y += 4;
+                                        y += 8;
+                                        break;
                                 }
                                 //if player moves one block,
                                 if( x % blockSize == 0 && y % blockSize == 0){
@@ -190,9 +194,9 @@ public class GamePanel extends JPanel{
 
         private void drawHpBar(Graphics g , int x, int y , int width){
             g.setColor(Color.red);
-            g.fillRect(x, y, blockSize,2);
+            g.fillRect(x, y, blockSize,4);
             g.setColor(Color.green);
-            g.fillRect(x, y, width,2);
+            g.fillRect(x, y, width,4);
         }
 
     }

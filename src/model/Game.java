@@ -130,7 +130,6 @@ public class Game {
 	}
 
 	private void move(Rotation rotation) {
-
 		int ox = player.getTransform().getX();
 		int oy = player.getTransform().getY();
 		int x = ox;

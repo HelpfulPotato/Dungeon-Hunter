@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 public class Sprite extends Component{
-    private static final int maxCount = 5;
+    private static final int maxCount = 10;
     private int count;
     private BufferedImage[] images;
     private int currentIndex;
